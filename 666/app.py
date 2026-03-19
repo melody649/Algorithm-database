@@ -295,60 +295,77 @@ def home_page():
     # Collect all algorithms for search functionality
     all_algorithms = []
     
-    # Advanced Mathematics algorithms
-    math_algorithms = [
-        {"name": "Newton's Method", "file": "newton_method.py", "description": "Iterative algorithm for solving equation roots with quadratic convergence", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
-        {"name": "Lagrange Interpolation", "file": "lagrange_interpolation.py", "description": "Construct polynomial interpolation function through known points", "icon": "📈", "category": "Advanced Mathematics", "folder": "math"},
-        {"name": "Gaussian Elimination", "file": "gaussian_elimination.py", "description": "Classic algorithm for solving linear systems", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
-        {"name": "Simpson's Integration", "file": "simpson_integration.py", "description": "High-precision numerical integration method", "icon": "∫", "category": "Advanced Mathematics", "folder": "math"}
-    ]
+# Advanced Mathematics algorithms
+math_algorithms = [
+    {"name": "Newton's Method", "file": "newton_method.py", "description": "Iterative algorithm for solving equation roots with quadratic convergence", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
+    {"name": "Lagrange Interpolation", "file": "lagrange_interpolation.py", "description": "Construct polynomial interpolation function through known points", "icon": "📈", "category": "Advanced Mathematics", "folder": "math"},
+    {"name": "Gaussian Elimination", "file": "gaussian_elimination.py", "description": "Classic algorithm for solving linear systems", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
+    {"name": "Simpson's Integration", "file": "simpson_integration.py", "description": "High-precision numerical integration method", "icon": "∫", "category": "Advanced Mathematics", "folder": "math"}
+]
+
+# Data Structures algorithms
+data_algorithms = [
+    {"name": "Binary Search Tree", "file": "binary_search_tree.py", "description": "Efficient binary search tree implementation", "icon": "🌲", "category": "Data Structures", "folder": "data_structures"},
+    {"name": "AVL Tree", "file": "avl_tree.py", "description": "Self-balancing binary search tree maintaining O(log n) operation complexity", "icon": "⚖️", "category": "Data Structures", "folder": "data_structures"},
+    {"name": "Dijkstra's Algorithm", "file": "dijkstra_algorithm.py", "description": "Classic algorithm for solving single-source shortest path in graphs", "icon": "🛣️", "category": "Data Structures", "folder": "data_structures"},
+    {"name": "Hash Table", "file": "hash_table.py", "description": "Efficient key-value storage structure with average O(1) time complexity", "icon": "🔑", "category": "Data Structures", "folder": "data_structures"}
+]
+
+# Machine Learning algorithms
+ml_algorithms = [
+    {"name": "Linear Regression", "file": "linear_regression.py", "description": "Supervised learning algorithm for predicting continuous values", "icon": "📉", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "K-Nearest Neighbors", "file": "k_nearest_neighbors.py", "description": "Distance-based classification algorithm, simple and intuitive", "icon": "👥", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "K-Means Clustering", "file": "k_means_clustering.py", "description": "Classic unsupervised clustering algorithm", "icon": "🎯", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "Principal Component Analysis", "file": "pca.py", "description": "Dimensionality reduction algorithm that extracts main features of data", "icon": "📊", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "Support Vector Machine", "file": "svm.py", "description": "Powerful supervised learning algorithm for classification and regression", "icon": "⚡", "category": "Machine Learning", "folder": "machine_learning"}
+]
+
+# Combine all algorithms
+all_algorithms = []
+all_algorithms.extend(math_algorithms)
+all_algorithms.extend(data_algorithms)
+all_algorithms.extend(ml_algorithms)
+
+# Calculate actual algorithm count
+total_algorithms = len(all_algorithms)
+
+# Stats cards 
+st.markdown(f"""
+<div class="stats-container">
+    <div class="stat-card">
+        <div class="stat-number">{total_algorithms}</div>
+        <div class="stat-label">Classic Algorithms</div>
+    </div>
+    ...
+</div>
+""", unsafe_allow_html=True)
     
-    # Data Structures algorithms
-    data_algorithms = [
-        {"name": "Binary Search Tree", "file": "binary_search_tree.py", "description": "Efficient binary search tree implementation", "icon": "🌲", "category": "Data Structures", "folder": "data_structures"},
-        {"name": "AVL Tree", "file": "avl_tree.py", "description": "Self-balancing binary search tree maintaining O(log n) operation complexity", "icon": "⚖️", "category": "Data Structures", "folder": "data_structures"},
-        {"name": "Dijkstra's Algorithm", "file": "dijkstra_algorithm.py", "description": "Classic algorithm for solving single-source shortest path in graphs", "icon": "🛣️", "category": "Data Structures", "folder": "data_structures"},
-        {"name": "Hash Table", "file": "hash_table.py", "description": "Efficient key-value storage structure with average O(1) time complexity", "icon": "🔑", "category": "Data Structures", "folder": "data_structures"}
-    ]
-    
-    # Machine Learning algorithms
-    ml_algorithms = [
-        {"name": "K-Means Clustering", "file": "k_means_clustering.py", "description": "Classic unsupervised clustering algorithm", "icon": "🎯", "category": "Machine Learning", "folder": "machine_learning"},
-        {"name": "Principal Component Analysis", "file": "pca.py", "description": "Dimensionality reduction algorithm that extracts main features of data", "icon": "📊", "category": "Machine Learning", "folder": "machine_learning"},
-        {"name": "Support Vector Machine", "file": "svm.py", "description": "Powerful supervised learning algorithm for classification and regression", "icon": "⚡", "category": "Machine Learning", "folder": "machine_learning"}
-    ]
-    
-    # Combine all algorithms
-    all_algorithms.extend(math_algorithms)
-    all_algorithms.extend(data_algorithms)
-    all_algorithms.extend(ml_algorithms)
-    
-    # Display search results if there's a query
-    if search_query:
-        search_results = [algo for algo in all_algorithms if search_query.lower() in algo['name'].lower()]
-        if search_results:
-            st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
-                       f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>" 
-                       "</div>", unsafe_allow_html=True)
-            
-            for algo in search_results:
-                col1, col2 = st.columns([4, 1])
-                with col1:
-                    st.markdown(f"""
-                    <div class="algo-item">
-                        <div class="algo-info">
-                            <h3>{algo['icon']} {algo['name']}</h3>
-                            <p>{algo['description']} <span style='color: #667eea; font-weight: 500;'>[{algo['category']}]</span></p>
-                        </div>
+# Display search results if there's a query
+if search_query:
+    search_results = [algo for algo in all_algorithms if search_query.lower() in algo['name'].lower()]
+    if search_results:
+        st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
+                   f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>" 
+                   "</div>", unsafe_allow_html=True)
+        
+        for algo in search_results:
+            col1, col2 = st.columns([4, 1])
+            with col1:
+                st.markdown(f"""
+                <div class="algo-item">
+                    <div class="algo-info">
+                        <h3>{algo['icon']} {algo['name']}</h3>
+                        <p>{algo['description']} <span style='color: #667eea; font-weight: 500;'>[{algo['category']}]</span></p>
                     </div>
-                    """, unsafe_allow_html=True)
-                with col2:
-                    if st.button("Learn Now", key=f"search_{algo['file']}"):
-                        st.session_state["algorithm"] = algo
-                        st.session_state["category"] = algo["category"]
-                        st.session_state["folder"] = algo["folder"]
-                        st.session_state["page"] = "algorithm_detail"
-                        st.rerun()
+                </div>
+                """, unsafe_allow_html=True)
+            with col2:
+                if st.button("Learn Now", key=f"search_{algo['file']}"):
+                    st.session_state["algorithm"] = algo
+                    st.session_state["category"] = algo["category"]
+                    st.session_state["folder"] = algo["folder"]
+                    st.session_state["page"] = "algorithm_detail"
+                    st.rerun()
         else:
             st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
                        f"<h3 style='margin-top: 0;'>🔍 Search Results</h3>" 
