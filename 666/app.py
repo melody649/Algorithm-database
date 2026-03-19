@@ -1,7 +1,57 @@
 import streamlit as st
-import os
+import importlib
 
-# Set page title and layout
+# =============================================================================
+# Global Constants - Algorithm Data
+# =============================================================================
+
+ALGORITHMS = {
+    "Advanced Mathematics": {
+        "folder": "math",
+        "icon": "📐",
+        "items": [
+            {"name": "Newton's Method", "file": "newton_method.py", "description": "Iterative algorithm for solving equation roots with quadratic convergence", "icon": "🔢"},
+            {"name": "Lagrange Interpolation", "file": "lagrange_interpolation.py", "description": "Construct polynomial interpolation function through known points", "icon": "📈"},
+            {"name": "Gaussian Elimination", "file": "gaussian_elimination.py", "description": "Classic algorithm for solving linear systems", "icon": "🔢"},
+            {"name": "Simpson's Integration", "file": "simpson_integration.py", "description": "High-precision numerical integration method", "icon": "∫"}
+        ]
+    },
+    "Data Structures": {
+        "folder": "data_structures",
+        "icon": "🌳",
+        "items": [
+            {"name": "Binary Search Tree", "file": "binary_search_tree.py", "description": "Efficient binary search tree implementation", "icon": "🌲"},
+            {"name": "AVL Tree", "file": "avl_tree.py", "description": "Self-balancing binary search tree maintaining O(log n) operation complexity", "icon": "⚖️"},
+            {"name": "Dijkstra's Algorithm", "file": "dijkstra_algorithm.py", "description": "Classic algorithm for solving single-source shortest path in graphs", "icon": "🛣️"},
+            {"name": "Hash Table", "file": "hash_table.py", "description": "Efficient key-value storage structure with average O(1) time complexity", "icon": "🔑"}
+        ]
+    },
+    "Machine Learning": {
+        "folder": "machine_learning",
+        "icon": "🤖",
+        "items": [
+            {"name": "Linear Regression", "file": "linear_regression.py", "description": "Supervised learning algorithm for predicting continuous values", "icon": "📉"},
+            {"name": "K-Nearest Neighbors", "file": "k_nearest_neighbors.py", "description": "Distance-based classification algorithm, simple and intuitive", "icon": "👥"},
+            {"name": "K-Means Clustering", "file": "k_means_clustering.py", "description": "Classic unsupervised clustering algorithm", "icon": "🎯"},
+            {"name": "Principal Component Analysis", "file": "pca.py", "description": "Dimensionality reduction algorithm that extracts main features of data", "icon": "📊"},
+            {"name": "Support Vector Machine", "file": "svm.py", "description": "Powerful supervised learning algorithm for classification and regression", "icon": "⚡"}
+        ]
+    }
+}
+
+# Flatten all algorithms for search functionality
+ALL_ALGOS = []
+for cat, data in ALGORITHMS.items():
+    for algo in data["items"]:
+        algo_copy = algo.copy()
+        algo_copy["category"] = cat
+        algo_copy["folder"] = data["folder"]
+        ALL_ALGOS.append(algo_copy)
+
+# =============================================================================
+# Page Configuration
+# =============================================================================
+
 st.set_page_config(
     page_title="Algorithm Database",
     page_icon="🧮",
@@ -9,7 +59,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS styles
+# =============================================================================
+# Custom CSS (unchanged, keep as original)
+# =============================================================================
+
 st.markdown("""
 <style>
     /* Global styles */
@@ -248,8 +301,20 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Home page content
+# =============================================================================
+# Helper Functions
+# =============================================================================
+
+def get_algorithms_by_category(category):
+    """Return algorithm list for a given category."""
+    return ALGORITHMS[category]["items"]
+
+# =============================================================================
+# Page Rendering Functions
+# =============================================================================
+
 def home_page():
+    """Render the home page."""
     # Hero section
     st.markdown("""
     <div class="hero-container">
@@ -261,15 +326,23 @@ def home_page():
     </div>
     """, unsafe_allow_html=True)
     
+    # Search and stats
+    search_col1, search_col2 = st.columns([3, 1])
+    with search_col1:
+        st.markdown('<div class="section-title">📚 Algorithm Categories</div>', unsafe_allow_html=True)
+    with search_col2:
+        search_query = st.text_input("Search Algorithms", placeholder="Enter algorithm name...", key="search_home")
+    
     # Stats cards
-    st.markdown("""
+    total_algos = len(ALL_ALGOS)
+    st.markdown(f"""
     <div class="stats-container">
         <div class="stat-card">
-            <div class="stat-number">12</div>
+            <div class="stat-number">{total_algos}</div>
             <div class="stat-label">Classic Algorithms</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number">3</div>
+            <div class="stat-number">{len(ALGORITHMS)}</div>
             <div class="stat-label">Algorithm Categories</div>
         </div>
         <div class="stat-card">
@@ -283,143 +356,95 @@ def home_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # Algorithm categories
-    # Create a row with title and search bar
-    search_col1, search_col2 = st.columns([3, 1])
-    with search_col1:
-        st.markdown('<div class="section-title">📚 Algorithm Categories</div>', unsafe_allow_html=True)
-    with search_col2:
-        # Search bar for algorithms
-        search_query = st.text_input("Search Algorithms", placeholder="Enter algorithm name...", key="search")
-    
-    # Collect all algorithms for search functionality
-    all_algorithms = []
-    
-# Advanced Mathematics algorithms
-math_algorithms = [
-    {"name": "Newton's Method", "file": "newton_method.py", "description": "Iterative algorithm for solving equation roots with quadratic convergence", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
-    {"name": "Lagrange Interpolation", "file": "lagrange_interpolation.py", "description": "Construct polynomial interpolation function through known points", "icon": "📈", "category": "Advanced Mathematics", "folder": "math"},
-    {"name": "Gaussian Elimination", "file": "gaussian_elimination.py", "description": "Classic algorithm for solving linear systems", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
-    {"name": "Simpson's Integration", "file": "simpson_integration.py", "description": "High-precision numerical integration method", "icon": "∫", "category": "Advanced Mathematics", "folder": "math"}
-]
-
-# Data Structures algorithms
-data_algorithms = [
-    {"name": "Binary Search Tree", "file": "binary_search_tree.py", "description": "Efficient binary search tree implementation", "icon": "🌲", "category": "Data Structures", "folder": "data_structures"},
-    {"name": "AVL Tree", "file": "avl_tree.py", "description": "Self-balancing binary search tree maintaining O(log n) operation complexity", "icon": "⚖️", "category": "Data Structures", "folder": "data_structures"},
-    {"name": "Dijkstra's Algorithm", "file": "dijkstra_algorithm.py", "description": "Classic algorithm for solving single-source shortest path in graphs", "icon": "🛣️", "category": "Data Structures", "folder": "data_structures"},
-    {"name": "Hash Table", "file": "hash_table.py", "description": "Efficient key-value storage structure with average O(1) time complexity", "icon": "🔑", "category": "Data Structures", "folder": "data_structures"}
-]
-
-# Machine Learning algorithms
-ml_algorithms = [
-    {"name": "Linear Regression", "file": "linear_regression.py", "description": "Supervised learning algorithm for predicting continuous values", "icon": "📉", "category": "Machine Learning", "folder": "machine_learning"},
-    {"name": "K-Nearest Neighbors", "file": "k_nearest_neighbors.py", "description": "Distance-based classification algorithm, simple and intuitive", "icon": "👥", "category": "Machine Learning", "folder": "machine_learning"},
-    {"name": "K-Means Clustering", "file": "k_means_clustering.py", "description": "Classic unsupervised clustering algorithm", "icon": "🎯", "category": "Machine Learning", "folder": "machine_learning"},
-    {"name": "Principal Component Analysis", "file": "pca.py", "description": "Dimensionality reduction algorithm that extracts main features of data", "icon": "📊", "category": "Machine Learning", "folder": "machine_learning"},
-    {"name": "Support Vector Machine", "file": "svm.py", "description": "Powerful supervised learning algorithm for classification and regression", "icon": "⚡", "category": "Machine Learning", "folder": "machine_learning"}
-]
-
-# Combine all algorithms
-all_algorithms = []
-all_algorithms.extend(math_algorithms)
-all_algorithms.extend(data_algorithms)
-all_algorithms.extend(ml_algorithms)
-
-# Calculate actual algorithm count
-total_algorithms = len(all_algorithms)
-
-# Stats cards 
-st.markdown(f"""
-<div class="stats-container">
-    <div class="stat-card">
-        <div class="stat-number">{total_algorithms}</div>
-        <div class="stat-label">Classic Algorithms</div>
-    </div>
-    ...
-</div>
-""", unsafe_allow_html=True)
-    
-# Display search results if there's a query
-if search_query:
-    search_results = [algo for algo in all_algorithms if search_query.lower() in algo['name'].lower()]
-    if search_results:
-        st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
-                   f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>" 
-                   "</div>", unsafe_allow_html=True)
-        
-        for algo in search_results:
-            col1, col2 = st.columns([4, 1])
-            with col1:
-                st.markdown(f"""
-                <div class="algo-item">
-                    <div class="algo-info">
-                        <h3>{algo['icon']} {algo['name']}</h3>
-                        <p>{algo['description']} <span style='color: #667eea; font-weight: 500;'>[{algo['category']}]</span></p>
+    # Search results
+    if search_query:
+        search_results = [algo for algo in ALL_ALGOS if search_query.lower() in algo['name'].lower()]
+        if search_results:
+            st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
+                       f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>" 
+                       "</div>", unsafe_allow_html=True)
+            
+            for algo in search_results:
+                col1, col2 = st.columns([4, 1])
+                with col1:
+                    st.markdown(f"""
+                    <div class="algo-item">
+                        <div class="algo-info">
+                            <h3>{algo['icon']} {algo['name']}</h3>
+                            <p>{algo['description']} <span style='color: #667eea; font-weight: 500;'>[{algo['category']}]</span></p>
+                        </div>
                     </div>
-                </div>
-                """, unsafe_allow_html=True)
-            with col2:
-                if st.button("Learn Now", key=f"search_{algo['file']}"):
-                    st.session_state["algorithm"] = algo
-                    st.session_state["category"] = algo["category"]
-                    st.session_state["folder"] = algo["folder"]
-                    st.session_state["page"] = "algorithm_detail"
-                    st.rerun()
+                    """, unsafe_allow_html=True)
+                with col2:
+                    # Use a unique key that includes category to avoid collisions
+                    if st.button("Learn Now", key=f"search_{algo['category']}_{algo['file']}"):
+                        st.session_state["algorithm"] = algo
+                        st.session_state["category"] = algo["category"]
+                        st.session_state["folder"] = algo["folder"]
+                        st.session_state["page"] = "algorithm_detail"
+                        st.rerun()
         else:
             st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
                        f"<h3 style='margin-top: 0;'>🔍 Search Results</h3>" 
                        f"<p>No algorithms found matching '{search_query}'</p>" 
                        "</div>", unsafe_allow_html=True)
     
+    # Category cards
     col1, col2, col3 = st.columns(3)
+    categories = list(ALGORITHMS.keys())
     
     with col1:
-        st.markdown("""
-        <div class="category-card" onclick="window.location.href='?page=math'">
-            <div class="category-icon">📐</div>
-            <div class="category-title">Advanced Mathematics</div>
+        cat = categories[0]
+        data = ALGORITHMS[cat]
+        st.markdown(f"""
+        <div class="category-card">
+            <div class="category-icon">{data['icon']}</div>
+            <div class="category-title">{cat}</div>
             <div class="category-desc">
                 Includes numerical analysis, interpolation methods, linear algebra and other classic mathematical algorithms,
                 helping to understand the core principles of mathematical computation.
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Explore Advanced Mathematics", key="math_btn"):
+        if st.button(f"Explore {cat}", key="math_btn"):
             st.session_state["page"] = "algorithm_list"
-            st.session_state["category"] = "Advanced Mathematics"
+            st.session_state["category"] = cat
             st.rerun()
     
     with col2:
-        st.markdown("""
-        <div class="category-card" onclick="window.location.href='?page=data'">
-            <div class="category-icon">🌳</div>
-            <div class="category-title">Data Structures</div>
+        cat = categories[1]
+        data = ALGORITHMS[cat]
+        st.markdown(f"""
+        <div class="category-card">
+            <div class="category-icon">{data['icon']}</div>
+            <div class="category-title">{cat}</div>
             <div class="category-desc">
                 Covers core data structures such as trees, graphs, and hash tables,
                 demonstrating efficient ways of data organization and access through visualization.
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Explore Data Structures", key="data_btn"):
+        if st.button(f"Explore {cat}", key="data_btn"):
             st.session_state["page"] = "algorithm_list"
-            st.session_state["category"] = "Data Structures"
+            st.session_state["category"] = cat
             st.rerun()
     
     with col3:
-        st.markdown("""
-        <div class="category-card" onclick="window.location.href='?page=ml'">
-            <div class="category-icon">🤖</div>
-            <div class="category-title">Machine Learning</div>
+        cat = categories[2]
+        data = ALGORITHMS[cat]
+        st.markdown(f"""
+        <div class="category-card">
+            <div class="category-icon">{data['icon']}</div>
+            <div class="category-title">{cat}</div>
             <div class="category-desc">
                 From linear regression to clustering analysis,
                 master basic machine learning algorithms and their practical applications.
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Explore Machine Learning", key="ml_btn"):
+        if st.button(f"Explore {cat}", key="ml_btn"):
             st.session_state["page"] = "algorithm_list"
-            st.session_state["category"] = "Machine Learning"
+            st.session_state["category"] = cat
             st.rerun()
     
     # Platform features
@@ -463,55 +488,28 @@ if search_query:
         </div>
         """, unsafe_allow_html=True)
 
-# Algorithm list page
 def algorithm_list(category):
-    # Page title
-    category_icons = {
-        "Advanced Mathematics": "📐",
-        "Data Structures": "🌳",
-        "Machine Learning": "🤖"
-    }
-    
+    """Render the list of algorithms for a given category."""
+    data = ALGORITHMS[category]
     st.markdown(f"""
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                 border-radius: 16px; padding: 2rem; color: white; margin-bottom: 2rem;">
-        <div style="font-size: 2.5rem; font-weight: 700;">{category_icons.get(category, '📚')} {category}</div>
+        <div style="font-size: 2.5rem; font-weight: 700;">{data['icon']} {category}</div>
         <div style="font-size: 1.1rem; opacity: 0.9; margin-top: 0.5rem;">
             Select an algorithm below to start learning
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Display different algorithms based on category
-    if category == "Advanced Mathematics":
-        algorithms = [
-            {"name": "Newton's Method", "file": "newton_method.py", "description": "Iterative algorithm for solving equation roots with quadratic convergence", "icon": "🔢"},
-            {"name": "Lagrange Interpolation", "file": "lagrange_interpolation.py", "description": "Construct polynomial interpolation function through known points", "icon": "📈"},
-            {"name": "Gaussian Elimination", "file": "gaussian_elimination.py", "description": "Classic algorithm for solving linear systems", "icon": "🔢"},
-            {"name": "Simpson's Integration", "file": "simpson_integration.py", "description": "High-precision numerical integration method", "icon": "∫"}
-        ]
-        folder = "math"
+    # Optional search within category
+    search_query = st.text_input("Search in this category", placeholder="Enter algorithm name...", key=f"search_{category}")
     
-    elif category == "Data Structures":
-        algorithms = [
-            {"name": "Binary Search Tree", "file": "binary_search_tree.py", "description": "Efficient binary search tree implementation", "icon": "🌲"},
-            {"name": "AVL Tree", "file": "avl_tree.py", "description": "Self-balancing binary search tree maintaining O(log n) operation complexity", "icon": "⚖️"},
-            {"name": "Dijkstra's Algorithm", "file": "dijkstra_algorithm.py", "description": "Classic algorithm for solving single-source shortest path in graphs", "icon": "🛣️"},
-            {"name": "Hash Table", "file": "hash_table.py", "description": "Efficient key-value storage structure with average O(1) time complexity", "icon": "🔑"}
-        ]
-        folder = "data_structures"
+    algorithms = data["items"]
+    if search_query:
+        algorithms = [a for a in algorithms if search_query.lower() in a["name"].lower()]
+        if not algorithms:
+            st.info("No matching algorithms found.")
     
-    elif category == "Machine Learning":
-        algorithms = [
-            {"name": "Linear Regression", "file": "linear_regression.py", "description": "Supervised learning algorithm for predicting continuous values", "icon": "📉"},
-            {"name": "K-Nearest Neighbors", "file": "k_nearest_neighbors.py", "description": "Distance-based classification algorithm, simple and intuitive", "icon": "👥"},
-            {"name": "K-Means Clustering", "file": "k_means_clustering.py", "description": "Classic unsupervised clustering algorithm", "icon": "🎯"},
-            {"name": "Principal Component Analysis", "file": "pca.py", "description": "Dimensionality reduction algorithm that extracts main features of data", "icon": "📊"},
-            {"name": "Support Vector Machine", "file": "svm.py", "description": "Powerful supervised learning algorithm for classification and regression", "icon": "⚡"}
-        ]
-        folder = "machine_learning"
-    
-    # Display algorithm list
     for algo in algorithms:
         col1, col2 = st.columns([4, 1])
         with col1:
@@ -524,15 +522,18 @@ def algorithm_list(category):
             </div>
             """, unsafe_allow_html=True)
         with col2:
-            if st.button("Start Learning", key=algo["file"]):
-                st.session_state["algorithm"] = algo
+            if st.button("Start Learning", key=f"{category}_{algo['file']}"):
+                algo_with_meta = algo.copy()
+                algo_with_meta["category"] = category
+                algo_with_meta["folder"] = data["folder"]
+                st.session_state["algorithm"] = algo_with_meta
                 st.session_state["category"] = category
-                st.session_state["folder"] = folder
+                st.session_state["folder"] = data["folder"]
                 st.session_state["page"] = "algorithm_detail"
                 st.rerun()
 
-# Algorithm detail page
 def algorithm_detail():
+    """Render the detail page for a selected algorithm."""
     if "algorithm" not in st.session_state:
         st.error("Please select an algorithm first")
         return
@@ -541,7 +542,6 @@ def algorithm_detail():
     category = st.session_state["category"]
     folder = st.session_state["folder"]
     
-    # Algorithm title
     st.markdown(f"""
     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                 border-radius: 16px; padding: 2rem; color: white; margin-bottom: 2rem;">
@@ -550,20 +550,33 @@ def algorithm_detail():
     </div>
     """, unsafe_allow_html=True)
     
-    # Try to import and run the algorithm file
+    # Dynamic import and execution with improved error handling
     try:
-        # Build module path
-        module_path = f"algorithms.{folder}.{algo['file'].replace('.py', '')}"
-        # Dynamically import module
-        import importlib
-        algo_module = importlib.import_module(module_path)
-        # Call module's main function
+        module_name = f"algorithms.{folder}.{algo['file'].replace('.py', '')}"
+        algo_module = importlib.import_module(module_name)
+        
+        # Check if main function exists
+        if not hasattr(algo_module, "main"):
+            st.error(f"The algorithm module '{algo['file']}' does not have a 'main()' function. Please implement it.")
+            return
+        
+        # Execute the main function
         algo_module.main()
+        
+    except ModuleNotFoundError:
+        st.error(f"Algorithm file '{algo['file']}' not found in 'algorithms/{folder}/'. Please ensure the file exists.")
+    except AttributeError as e:
+        st.error(f"The algorithm module is missing a required component: {e}")
     except Exception as e:
-        st.error(f"Failed to load algorithm: {e}")
-        st.write("Please ensure the algorithm file is properly implemented with a main function.")
+        st.error(f"An error occurred while running the algorithm: {e}")
+        # Optionally display full traceback in an expander for debugging
+        with st.expander("Show error details"):
+            st.exception(e)
 
-# Sidebar navigation
+# =============================================================================
+# Sidebar Navigation
+# =============================================================================
+
 st.sidebar.markdown("""
 <div style="color: white; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 1rem;">
     <div style="font-size: 1.5rem; font-weight: 700;">🧮 Algorithm Database</div>
@@ -572,33 +585,52 @@ st.sidebar.markdown("""
 """, unsafe_allow_html=True)
 
 # Navigation options
-options = ["Home", "Advanced Mathematics", "Data Structures", "Machine Learning"]
+options = ["Home"] + list(ALGORITHMS.keys())
 
-# Get current page
+# Use session_state to manage navigation selection
+if "nav_selection" not in st.session_state:
+    st.session_state.nav_selection = "Home"
+
+# Sidebar radio (store selection in session_state)
+selected = st.sidebar.radio("Select Page", options, key="nav_radio", index=options.index(st.session_state.nav_selection))
+
+# Update session_state when selection changes
+if selected != st.session_state.nav_selection:
+    st.session_state.nav_selection = selected
+    # Reset page state based on selection
+    if selected == "Home":
+        st.session_state["page"] = "home"
+    else:
+        st.session_state["page"] = "algorithm_list"
+        st.session_state["category"] = selected
+    st.rerun()
+
+# =============================================================================
+# Main Routing Logic
+# =============================================================================
+
+# Determine current page from session_state (default to home)
 if "page" not in st.session_state:
     st.session_state["page"] = "home"
 
-# Sidebar selection
-selection = st.sidebar.radio("Select Page", options, index=0 if st.session_state["page"] == "home" else (
-    1 if st.session_state["page"] in ["algorithm_list", "algorithm_detail"] and st.session_state.get("category") == "Advanced Mathematics" else
-    2 if st.session_state["page"] in ["algorithm_list", "algorithm_detail"] and st.session_state.get("category") == "Data Structures" else
-    3 if st.session_state["page"] in ["algorithm_list", "algorithm_detail"] and st.session_state.get("category") == "Machine Learning" else 0
-))
-
-# Handle navigation
-if selection == "Home":
-    st.session_state["page"] = "home"
+# Render appropriate page
+if st.session_state["page"] == "home":
     home_page()
-elif st.session_state.get("page") == "algorithm_detail":
+elif st.session_state["page"] == "algorithm_list":
+    if "category" in st.session_state and st.session_state["category"] in ALGORITHMS:
+        algorithm_list(st.session_state["category"])
+    else:
+        st.error("Invalid category. Returning to home.")
+        st.session_state["page"] = "home"
+        st.rerun()
+elif st.session_state["page"] == "algorithm_detail":
     algorithm_detail()
-elif selection in ["Advanced Mathematics", "Data Structures", "Machine Learning"]:
-    st.session_state["page"] = "algorithm_list"
-    st.session_state["category"] = selection
-    algorithm_list(selection)
-
-# If current page is algorithm detail, show back button
-if st.session_state.get("page") == "algorithm_detail":
+    # Add back button in sidebar
     st.sidebar.markdown("<br>", unsafe_allow_html=True)
     if st.sidebar.button("← Back to Algorithm List"):
         st.session_state["page"] = "algorithm_list"
         st.rerun()
+else:
+    # Fallback
+    st.session_state["page"] = "home"
+    home_page()
