@@ -360,8 +360,8 @@ def home_page():
     if search_query:
         search_results = [algo for algo in ALL_ALGOS if search_query.lower() in algo['name'].lower()]
         if search_results:
-            st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>"
-                       f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>"
+            st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
+                       f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>" 
                        "</div>", unsafe_allow_html=True)
             
             for algo in search_results:
