@@ -263,195 +263,192 @@ def home_page():
     </div>
     """, unsafe_allow_html=True)
     
-    # Algorithm categories
-    # Create a row with title and search bar
-    search_col1, search_col2 = st.columns([3, 1])
-    with search_col1:
-        st.markdown('<div class="section-title">📚 Algorithm Categories</div>', unsafe_allow_html=True)
-    with search_col2:
-        # Search bar for algorithms
-        search_query = st.text_input("Search Algorithms", placeholder="Enter algorithm name...", key="search")
+# Algorithm categories
+# Create a row with title and search bar
+search_col1, search_col2 = st.columns([3, 1])
+with search_col1:
+    st.markdown('<div class="section-title">📚 Algorithm Categories</div>', unsafe_allow_html=True)
+with search_col2:
+    # Search bar for algorithms
+    search_query = st.text_input("Search Algorithms", placeholder="Enter algorithm name...", key="search")
     
     # Collect all algorithms for search functionality
     all_algorithms = []
     
-    # Advanced Mathematics algorithms
-    math_algorithms = [
-        {"name": "Newton's Method", "file": "newton_method.py", "description": "Iterative algorithm for solving equation roots with quadratic convergence", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
-        {"name": "Lagrange Interpolation", "file": "lagrange_interpolation.py", "description": "Construct polynomial interpolation function through known points", "icon": "📈", "category": "Advanced Mathematics", "folder": "math"},
-        {"name": "Gaussian Elimination", "file": "gaussian_elimination.py", "description": "Classic algorithm for solving linear systems", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
-        {"name": "Simpson's Integration", "file": "simpson_integration.py", "description": "High-precision numerical integration method", "icon": "∫", "category": "Advanced Mathematics", "folder": "math"}
-    ]
+# Advanced Mathematics algorithms
+math_algorithms = [
+    {"name": "Newton's Method", "file": "newton_method.py", "description": "Iterative algorithm for solving equation roots with quadratic convergence", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
+    {"name": "Lagrange Interpolation", "file": "lagrange_interpolation.py", "description": "Construct polynomial interpolation function through known points", "icon": "📈", "category": "Advanced Mathematics", "folder": "math"},
+    {"name": "Gaussian Elimination", "file": "gaussian_elimination.py", "description": "Classic algorithm for solving linear systems", "icon": "🔢", "category": "Advanced Mathematics", "folder": "math"},
+    {"name": "Simpson's Integration", "file": "simpson_integration.py", "description": "High-precision numerical integration method", "icon": "∫", "category": "Advanced Mathematics", "folder": "math"}
+]
+
+# Data Structures algorithms
+data_algorithms = [
+    {"name": "Binary Search Tree", "file": "binary_search_tree.py", "description": "Efficient binary search tree implementation", "icon": "🌲", "category": "Data Structures", "folder": "data_structures"},
+    {"name": "AVL Tree", "file": "avl_tree.py", "description": "Self-balancing binary search tree maintaining O(log n) operation complexity", "icon": "⚖️", "category": "Data Structures", "folder": "data_structures"},
+    {"name": "Dijkstra's Algorithm", "file": "dijkstra_algorithm.py", "description": "Classic algorithm for solving single-source shortest path in graphs", "icon": "🛣️", "category": "Data Structures", "folder": "data_structures"},
+    {"name": "Hash Table", "file": "hash_table.py", "description": "Efficient key-value storage structure with average O(1) time complexity", "icon": "🔑", "category": "Data Structures", "folder": "data_structures"}
+]
+
+# Machine Learning algorithms
+ml_algorithms = [
+    {"name": "Linear Regression", "file": "linear_regression.py", "description": "Supervised learning algorithm for predicting continuous values", "icon": "📉", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "K-Nearest Neighbors", "file": "k_nearest_neighbors.py", "description": "Distance-based classification algorithm, simple and intuitive", "icon": "👥", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "K-Means Clustering", "file": "k_means_clustering.py", "description": "Classic unsupervised clustering algorithm", "icon": "🎯", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "Principal Component Analysis", "file": "pca.py", "description": "Dimensionality reduction algorithm that extracts main features of data", "icon": "📊", "category": "Machine Learning", "folder": "machine_learning"},
+    {"name": "Support Vector Machine", "file": "svm.py", "description": "Powerful supervised learning algorithm for classification and regression", "icon": "⚡", "category": "Machine Learning", "folder": "machine_learning"}
+]
+
+# Collect all algorithms for search functionality
+all_algorithms = []
+all_algorithms.extend(math_algorithms)
+all_algorithms.extend(data_algorithms)
+all_algorithms.extend(ml_algorithms)
+
+# Calculate actual algorithm count
+total_algorithms = len(all_algorithms)
     
-    # Data Structures algorithms
-    data_algorithms = [
-        {"name": "Binary Search Tree", "file": "binary_search_tree.py", "description": "Efficient binary search tree implementation", "icon": "🌲", "category": "Data Structures", "folder": "data_structures"},
-        {"name": "AVL Tree", "file": "avl_tree.py", "description": "Self-balancing binary search tree maintaining O(log n) operation complexity", "icon": "⚖️", "category": "Data Structures", "folder": "data_structures"},
-        {"name": "Dijkstra's Algorithm", "file": "dijkstra_algorithm.py", "description": "Classic algorithm for solving single-source shortest path in graphs", "icon": "🛣️", "category": "Data Structures", "folder": "data_structures"},
-        {"name": "Hash Table", "file": "hash_table.py", "description": "Efficient key-value storage structure with average O(1) time complexity", "icon": "🔑", "category": "Data Structures", "folder": "data_structures"}
-    ]
+# Stats cards
+st.markdown(f"""
+<div class="stats-container">
+    <div class="stat-card">
+        <div class="stat-number">{total_algorithms}</div>
+        <div class="stat-label">Classic Algorithms</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Algorithm Categories</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Interactive Experience</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Open Source</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
     
-    # Machine Learning algorithms
-    ml_algorithms = [
-        {"name": "Linear Regression", "file": "linear_regression.py", "description": "Supervised learning algorithm for predicting continuous values", "icon": "📉", "category": "Machine Learning", "folder": "machine_learning"},
-        {"name": "K-Nearest Neighbors", "file": "k_nearest_neighbors.py", "description": "Distance-based classification algorithm, simple and intuitive", "icon": "👥", "category": "Machine Learning", "folder": "machine_learning"},
-        {"name": "K-Means Clustering", "file": "k_means_clustering.py", "description": "Classic unsupervised clustering algorithm", "icon": "🎯", "category": "Machine Learning", "folder": "machine_learning"},
-        {"name": "Principal Component Analysis", "file": "pca.py", "description": "Dimensionality reduction algorithm that extracts main features of data", "icon": "📊", "category": "Machine Learning", "folder": "machine_learning"},
-        {"name": "Support Vector Machine", "file": "svm.py", "description": "Powerful supervised learning algorithm for classification and regression", "icon": "⚡", "category": "Machine Learning", "folder": "machine_learning"}
-    ]
-    
-    # Combine all algorithms
-    all_algorithms.extend(math_algorithms)
-    all_algorithms.extend(data_algorithms)
-    all_algorithms.extend(ml_algorithms)
-    
-    # Calculate actual algorithm count
-    total_algorithms = len(all_algorithms)
-    
-    # Stats cards
-    st.markdown(f"""
-    <div class="stats-container">
-        <div class="stat-card">
-            <div class="stat-number">{total_algorithms}</div>
-            <div class="stat-label">Classic Algorithms</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">3</div>
-            <div class="stat-label">Algorithm Categories</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">∞</div>
-            <div class="stat-label">Interactive Experience</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Open Source</div>
+# Display search results if there's a query
+if search_query:
+    search_results = [algo for algo in all_algorithms if search_query.lower() in algo['name'].lower()]
+    if search_results:
+        st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
+                   f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>" 
+                   "</div>", unsafe_allow_html=True)
+        
+        for algo in search_results:
+            col1, col2 = st.columns([4, 1])
+            with col1:
+                st.markdown(f"""
+                <div class="algo-item">
+                    <div class="algo-info">
+                        <h3>{algo['icon']} {algo['name']}</h3>
+                        <p>{algo['description']} <span style='color: #667eea; font-weight: 500;'>[{algo['category']}]</span></p>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            with col2:
+                if st.button("Learn Now", key=f"search_{algo['file']}"):
+                    st.session_state["algorithm"] = algo
+                    st.session_state["category"] = algo["category"]
+                    st.session_state["folder"] = algo["folder"]
+                    st.session_state["page"] = "algorithm_detail"
+                    st.rerun()
+
+# Algorithm categories display
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div class="category-card" onclick="window.location.href='?page=math'">
+        <div class="category-icon">📐</div>
+        <div class="category-title">Advanced Mathematics</div>
+        <div class="category-desc">
+            Includes numerical analysis, interpolation methods, linear algebra and other classic mathematical algorithms,
+            helping to understand the core principles of mathematical computation.
         </div>
     </div>
     """, unsafe_allow_html=True)
-    
-    # Display search results if there's a query
-    if search_query:
-        search_results = [algo for algo in all_algorithms if search_query.lower() in algo['name'].lower()]
-        if search_results:
-            st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
-                       f"<h3 style='margin-top: 0;'>🔍 Search Results ({len(search_results)} found)</h3>" 
-                       "</div>", unsafe_allow_html=True)
-            
-            for algo in search_results:
-                col1, col2 = st.columns([4, 1])
-                with col1:
-                    st.markdown(f"""
-                    <div class="algo-item">
-                        <div class="algo-info">
-                            <h3>{algo['icon']} {algo['name']}</h3>
-                            <p>{algo['description']} <span style='color: #667eea; font-weight: 500;'>[{algo['category']}]</span></p>
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
-                with col2:
-                    if st.button("Learn Now", key=f"search_{algo['file']}"):
-                        st.session_state["algorithm"] = algo
-                        st.session_state["category"] = algo["category"]
-                        st.session_state["folder"] = algo["folder"]
-                        st.session_state["page"] = "algorithm_detail"
-                        st.rerun()
-        else:
-            st.markdown(f"<div style='margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;'>" 
-                       f"<h3 style='margin-top: 0;'>🔍 Search Results</h3>" 
-                       f"<p>No algorithms found matching '{search_query}'</p>" 
-                       "</div>", unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        <div class="category-card" onclick="window.location.href='?page=math'">
-            <div class="category-icon">📐</div>
-            <div class="category-title">Advanced Mathematics</div>
-            <div class="category-desc">
-                Includes numerical analysis, interpolation methods, linear algebra and other classic mathematical algorithms,
-                helping to understand the core principles of mathematical computation.
-            </div>
+    if st.button("Explore Advanced Mathematics", key="math_btn"):
+        st.session_state["page"] = "algorithm_list"
+        st.session_state["category"] = "Advanced Mathematics"
+        st.rerun()
+
+with col2:
+    st.markdown("""
+    <div class="category-card" onclick="window.location.href='?page=data'">
+        <div class="category-icon">🌳</div>
+        <div class="category-title">Data Structures</div>
+        <div class="category-desc">
+            Covers core data structures such as trees, graphs, and hash tables,
+            demonstrating efficient ways of data organization and access through visualization.
         </div>
-        """, unsafe_allow_html=True)
-        if st.button("Explore Advanced Mathematics", key="math_btn"):
-            st.session_state["page"] = "algorithm_list"
-            st.session_state["category"] = "Advanced Mathematics"
-            st.rerun()
-    
-    with col2:
-        st.markdown("""
-        <div class="category-card" onclick="window.location.href='?page=data'">
-            <div class="category-icon">🌳</div>
-            <div class="category-title">Data Structures</div>
-            <div class="category-desc">
-                Covers core data structures such as trees, graphs, and hash tables,
-                demonstrating efficient ways of data organization and access through visualization.
-            </div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Explore Data Structures", key="data_btn"):
+        st.session_state["page"] = "algorithm_list"
+        st.session_state["category"] = "Data Structures"
+        st.rerun()
+
+with col3:
+    st.markdown("""
+    <div class="category-card" onclick="window.location.href='?page=ml'">
+        <div class="category-icon">🤖</div>
+        <div class="category-title">Machine Learning</div>
+        <div class="category-desc">
+            From linear regression to clustering analysis,
+            master basic machine learning algorithms and their practical applications.
         </div>
-        """, unsafe_allow_html=True)
-        if st.button("Explore Data Structures", key="data_btn"):
-            st.session_state["page"] = "algorithm_list"
-            st.session_state["category"] = "Data Structures"
-            st.rerun()
-    
-    with col3:
-        st.markdown("""
-        <div class="category-card" onclick="window.location.href='?page=ml'">
-            <div class="category-icon">🤖</div>
-            <div class="category-title">Machine Learning</div>
-            <div class="category-desc">
-                From linear regression to clustering analysis,
-                master basic machine learning algorithms and their practical applications.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        if st.button("Explore Machine Learning", key="ml_btn"):
-            st.session_state["page"] = "algorithm_list"
-            st.session_state["category"] = "Machine Learning"
-            st.rerun()
-    
-    # Platform features
-    st.markdown('<div class="section-title" style="margin-top: 3rem;">✨ Platform Features</div>', unsafe_allow_html=True)
-    
-    feat_col1, feat_col2, feat_col3, feat_col4 = st.columns(4)
-    
-    with feat_col1:
-        st.markdown("""
-        <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📖</div>
-            <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Detailed Principles</div>
-            <div style="color: #666; font-size: 0.9rem;">Clear algorithm explanations and mathematical derivations</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with feat_col2:
-        st.markdown("""
-        <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💻</div>
-            <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Code Examples</div>
-            <div style="color: #666; font-size: 0.9rem;">Runnable Python code</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with feat_col3:
-        st.markdown("""
-        <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📊</div>
-            <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Real-time Visualization</div>
-            <div style="color: #666; font-size: 0.9rem;">Dynamic charts showing algorithm processes</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with feat_col4:
-        st.markdown("""
-        <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎛️</div>
-            <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Parameter Adjustment</div>
-            <div style="color: #666; font-size: 0.9rem;">Interactive parameter control</div>
-        </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Explore Machine Learning", key="ml_btn"):
+        st.session_state["page"] = "algorithm_list"
+        st.session_state["category"] = "Machine Learning"
+        st.rerun()
+
+# Platform features
+st.markdown('<div class="section-title" style="margin-top: 3rem;">✨ Platform Features</div>', unsafe_allow_html=True)
+
+feat_col1, feat_col2, feat_col3, feat_col4 = st.columns(4)
+
+with feat_col1:
+    st.markdown("""
+    <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📖</div>
+        <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Detailed Principles</div>
+        <div style="color: #666; font-size: 0.9rem;">Clear algorithm explanations and mathematical derivations</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with feat_col2:
+    st.markdown("""
+    <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">💻</div>
+        <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Code Examples</div>
+        <div style="color: #666; font-size: 0.9rem;">Runnable Python code</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with feat_col3:
+    st.markdown("""
+    <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📊</div>
+        <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Real-time Visualization</div>
+        <div style="color: #666; font-size: 0.9rem;">Dynamic charts showing algorithm processes</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with feat_col4:
+    st.markdown("""
+    <div style="background: white; border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎛️</div>
+        <div style="font-weight: 600; color: #333; margin-bottom: 0.5rem;">Parameter Adjustment</div>
+        <div style="color: #666; font-size: 0.9rem;">Interactive parameter control</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Algorithm list page
 def algorithm_list(category):
